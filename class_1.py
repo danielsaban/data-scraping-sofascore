@@ -1,1 +1,1 @@
-print('see you at Teder.fm saturday or kuli alma?')
+print('see you i need to go')
