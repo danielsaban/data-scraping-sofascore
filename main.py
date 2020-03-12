@@ -2,7 +2,7 @@ import requests
 from selenium import webdriver
 from bs4 import BeautifulSoup
 
-TOP3_LEAGUES_URLS = [r"https://www.sofascore.com/tournament/football/italy/serie-a/23",
+TOP3_LEAGUES_URLS = [r"https://www.sofascore.com/tournament/football/italy/serie-a/23", test
                      r"https://www.sofascore.com/tournament/football/spain/laliga/8",
                      r"https://www.sofascore.com/tournament/football/england/premier-league/17"]
 
