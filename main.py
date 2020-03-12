@@ -27,15 +27,12 @@ def extract_players_urls(team_url):
     :param team_url:
     :return:
     """
-    urls_list = []
     team_html = BeautifulSoup(requests.get(team_url).text, 'html.parser')
     all_players_html = team_html.find_all("a", class_="squad__player squad-player u-tC js-show-player-modal ff-medium")
     html_list = str(all_players_html).split()
     for line in html_list:
         if "href" in line:
-            urls_list.append("https://www.sofascore.com" + line.split("\"")[1])
-
-    return urls_list
+            print(extract_player_info("https://www.sofascore.com" + line.split("\"")[1]))
 
 
 def extract_teams_urls(league_url):
@@ -53,24 +50,15 @@ def extract_teams_urls(league_url):
 
 
 def main():
+    league_cnt = 1
     all_team_url = []
-    all_players_url = []
-    all_players_info = []
     for league_url in TOP3_LEAGUES_URLS:
+        print("getting teams from league #" + str(league_cnt))
         all_team_url += extract_teams_urls(league_url)
-        print("getting team from league")
+        league_cnt += 1
 
     for team_url in all_team_url:
-        all_players_url += extract_players_urls(team_url)
-        print("getting players urls from team urls")
-
-    cnt = 0
-    for player_url in all_players_url:
-        player_info = extract_player_info(player_url)
-        all_players_info += player_info
-        print(player_info)
-        print("getting player's info from urls #" + str(cnt))
-        cnt += 1
+        extract_players_urls(team_url)
 
 
 if __name__ == '__main__':
