@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 TOP3_LEAGUES_URLS = [r"https://www.sofascore.com/tournament/football/italy/serie-a/23",
                      r"https://www.sofascore.com/tournament/football/spain/laliga/8"
-                     r"https://www.sofascore.com/tournament/football/england/premier-league/17"]
+                     r"https://www.sofascore.com/tournament/football/england/premier-league/17"
 
 
 def extract_player_info(player_url):
