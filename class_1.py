@@ -1,9 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 r = requests.get('https://www.sofascore.com/it/squadra/calcio/inter/2697')
 
-r_2 = requests.get
+# r_2 = requests.get
 # print(r)
 # print(r.text)
 #
@@ -11,7 +12,7 @@ r_2 = requests.get
 #
 # print(r.encoding)
 
-soup = BeautifulSoup(r.content, 'html.parser')
+soup = BeautifulSoup(r, 'html.parser')
 print(soup.prettify())
 
 # list(soup.children)
