@@ -2,23 +2,31 @@ import requests
 from selenium import webdriver
 from bs4 import BeautifulSoup
 
-TOP3_LEAGUES_URLS = [r"https://www.sofascore.com/tournament/football/italy/serie-a/23",     # Serie A as the first
+TOP3_LEAGUES_URLS = [r"https://www.sofascore.com/tournament/football/italy/serie-a/23",
                      r"https://www.sofascore.com/tournament/football/spain/laliga/8"
                      r"https://www.sofascore.com/tournament/football/england/premier-league/17"]
 
 
 def extract_player_info(player_url):
-    player_html = BeautifulSoup(requests.get(player_url).text, 'html.parser')
-    player_panel_html = player_html.find_all("h2", class_="styles__DetailBoxTitle-sc-1ss54tr-5 enIhhc")
+    """
+    Starting from the url of a player's page on https://www.sofascore.com, the function extracts
+    the most interesting infos about him, if available, and returns them in a list.
+    :param player_url: url of the player on https://www.sofascore.com site.
+    :return: list ordered in the following way: [Name, Team, Nationality, Age, Height, Preferred Foot, Position, Shirt Number, Market Value]
+    """
+    player_html = BeautifulSoup(requests.get(player_url).text, 'html.parser')       # beautifulsoup of the player
+    player_panel_html = player_html.find_all("h2", class_="styles__DetailBoxTitle-sc-1ss54tr-5 enIhhc")     # html of the most interesting data
     team_name_raw = player_html.find_all("h3", class_="styles__TeamLink-sc-1ss54tr-7 hUZGuP")
-    team_name = str(team_name_raw).replace("<", ">").split(">")[-3]
+    team_name = str(team_name_raw).replace("<", ">").split(">")[-3]     # name of the team the player plays in
     details = str(player_panel_html).replace("<", ">").split(">")
+    raw_nationality = player_html.find_all("span", class_="u-pL8")
+    nationality = str(raw_nationality).replace("<", ">").split(">")[-3]
     player_name = player_url.split("/")[-2]
-    det = [player_name, team_name]
+    player_data = [player_name, team_name, nationality]      # initiating player's data list
     for i in range(len(details)):
-        if (r"h2 class=" in details[i] or r"span style" in details[i]) and details[i + 1] != '':
-            det.append(details[i + 1])
-    return det
+        if (r"h2 class=" in details[i] or r"span style" in details[i]) and details[i + 1] != '':        # adding data to the list
+            player_data.append(details[i + 1])
+    return player_data
 
 
 def extract_players_urls(team_url):
