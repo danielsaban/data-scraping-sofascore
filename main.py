@@ -4,8 +4,8 @@ from bs4 import BeautifulSoup
 import db_control
 from tqdm import tqdm
 
-TOP3_LEAGUES_URLS = [r"https://www.sofascore.com/tournament/football/italy/serie-a/23",  # base urls of each league
-                     r"https://www.sofascore.com/tournament/football/spain/laliga/8",  # can be expand to more leagues
+TOP3_LEAGUES_URLS = [r"https://www.sofascore.com/tournament/football/italy/serie-a/23",     # base urls of each league
+                     r"https://www.sofascore.com/tournament/football/spain/laliga/8",    # can be expand to more leagues
                      r"https://www.sofascore.com/tournament/football/england/premier-league/17"]
 
 
@@ -16,19 +16,39 @@ def extract_player_info(player_url):
     :param player_url: url of the player on https://www.sofascore.com site.
     :return: list ordered in the following way: [Name, Team, Nationality, Age, Height, Preferred Foot, Position, Shirt Number, Market Value]
     """
+    player_dict = {}
     player_html = BeautifulSoup(requests.get(player_url).text, 'html.parser')  # beautifulsoup of the player
     player_panel_html = player_html.find_all("h2",
                                              class_="styles__DetailBoxTitle-sc-1ss54tr-5 enIhhc")  # html of the most interesting data
     details = str(player_panel_html).replace("<", ">").split(">")
     raw_nationality = player_html.find_all("span", class_="u-pL8")
-    nationality = str(raw_nationality).replace("<", ">").split(">")[-3]
-    player_name = player_url.split("/")[-2]
-    player_data = [player_name, nationality]  # initiating player's data list
+    player_dict['nationality'] = str(raw_nationality).replace("<", ">").split(">")[-3]
+    player_dict['name'] = player_url.split("/")[-2].replace('-', ' ').title()
+    age_flag = True
     for i in range(len(details)):
-        if (r"h2 class=" in details[i] or r"span style" in details[i]) and details[
-            i + 1] != '':  # adding data to the list
-            player_data.append(details[i + 1])
-    return player_data
+        if (r"h2 class=" in details[i] or r"span style" in details[i]) and details[i + 1] != '':  # adding data to the list
+            if age_flag:
+                player_dict['age'] = int(details[i + 1])
+                age_flag = False
+            elif 'cm' in details[i + 1]:
+                player_dict['height'] = int(details[i + 1].split()[0])
+            elif '€' in details[i + 1]:
+                player_dict['market_val_million_euro'] = details[i + 1].split()[0]
+                if 'M' in player_dict['market_val_million_euro']:
+                    player_dict['market_val_million_euro'] = float(player_dict['market_val_million_euro'][: -1])
+                else:
+                    player_dict['market_val_million_euro'] = float(player_dict['market_val_million_euro'][: -1]) / 1000
+            elif details[i + 1] in ['Right', 'Left', 'Both']:
+                player_dict['prefd_foot'] = details[i + 1]
+            elif details[i + 1] in ['G', 'D', 'M', 'F']:
+                player_dict['position'] = details[i + 1]
+            else:
+                player_dict['shirt_num'] = int(details[i + 1])
+    dang_keys = ['age', 'height', 'prefd_foot', 'position', 'shirt_num', 'market_val_million_euro']
+    for key in dang_keys:
+        if key not in player_dict.keys():
+            player_dict[key] = None
+    return player_dict
 
 
 def extract_players_urls(team_url):
