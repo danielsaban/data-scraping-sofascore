@@ -1,24 +1,23 @@
 import mysql.connector
-from config import DB_NAME
+import config as cfg
 
 
 def connector():
     return mysql.connector.connect(
-        host="localhost",
-        user="Sagi",
-        password="Eilat2012",
-        database=DB_NAME
+        host=cfg.HOST,
+        user=cfg.USERNAME,
+        password=cfg.PASSWD,
+        database=cfg.DB_NAME
     )
-
 
 def create():
     my_db = mysql.connector.connect(
-        host="localhost",
-        user="Sagi",
-        password="Eilat2012",
+        host=cfg.HOST,
+        user=cfg.USERNAME,
+        password=cfg.PASSWD,
     )
     cur = my_db.cursor()
-    cur.execute('''CREATE DATABASE IF NOT EXISTS ''' + DB_NAME)
+    cur.execute('''CREATE DATABASE IF NOT EXISTS ''' + cfg.DB_NAME)
 
     my_db = connector()
     cur = my_db.cursor()
@@ -35,10 +34,10 @@ def create():
     cur.execute('''CREATE TABLE IF NOT EXISTS managers (
                         manager_id INT PRIMARY KEY AUTO_INCREMENT,
                         team_id INT,
-                        mngr_name CHAR NOT NULL,
+                        mngr_name VARCHAR(255) NOT NULL,
                         age INT,
-                        nationality CHAR,
-                        pref_formation CHAR,
+                        nationality VARCHAR(255),
+                        pref_formation VARCHAR(255),
                         avg_points_per_game REAL,
                         games_won INT,
                         games_drawn INT,
@@ -47,12 +46,12 @@ def create():
     cur.execute('''CREATE TABLE IF NOT EXISTS players (
                         player_id INT PRIMARY KEY AUTO_INCREMENT,
                         team_id INT,
-                        player_name CHAR NOT NULL,
-                        nationality CHAR,
-                        age INT,
+                        player_name VARCHAR(255) NOT NULL,
+                        nationality VARCHAR(255),
+                        birth_date DATETIME,
                         height_cm INT,
-                        prefd_foot CHAR,
-                        position CHAR,
+                        prefd_foot VARCHAR(255),
+                        position VARCHAR(255),
                         shirt_num INT,
                         market_val_million_euro REAL,
                         FOREIGN KEY (team_id) REFERENCES teams(team_id))''')
@@ -74,7 +73,7 @@ def write_teams(teams_info, lg_name):
     cur = my_db.cursor()
     cur.execute("INSERT INTO teams (team_name, number_of_players, league_id) VALUES "
                 "(%s, %s, (SELECT league_id FROM leagues WHERE league_name='"+lg_name+"'))"
-                """ON DUPLICATE KEY UPDATE team_name=team_name""",
+                """ON DUPLICATE KEY UPDATE team_id=team_id""",
                 (teams_info[0], teams_info[1]))
     my_db.commit()
     cur.close()
@@ -84,10 +83,11 @@ def write_players(players_info, team_n):
     my_db = connector()
     cur = my_db.cursor()
     for player in players_info:
-        cur.execute("INSERT INTO players (team_id, player_name, nationality, age, height_cm, prefd_foot,"
-                    "position, shirt_num)"
-                    "VALUES ((SELECT team_id FORM teams WHERE team_name='"+team_n+"' LIMIT 1),%s, %s, %s, %s, %s, %s, %s)",
-                    [player[0], player[1], int(player[2]), int(player[3].split()[0]),
-                     player[4], player[5], int(player[6])])
+        cur.execute("INSERT INTO players (team_id, player_name, nationality, birth_date, height_cm, prefd_foot,"
+                    "position, shirt_num, market_val_million_euro)"
+                    "VALUES ((SELECT team_id FROM teams WHERE team_name='"+team_n+"' LIMIT 1),%s, %s, %s, %s, %s, %s, %s, %s)"
+                    "ON DUPLICATE KEY UPDATE player_id=player_id",
+                    (player['name'], player['nationality'], player['birth_date'], player['height'],
+                     player['prefd_foot'], player['position'], player['shirt_num'], player['market_val_million_euro']))
     my_db.commit()
     cur.close()

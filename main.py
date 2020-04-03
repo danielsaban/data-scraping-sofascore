@@ -1,6 +1,7 @@
 import requests
 from selenium import webdriver
 from bs4 import BeautifulSoup
+from dateutil.parser import parse
 import db_control
 from tqdm import tqdm
 
@@ -21,16 +22,22 @@ def extract_player_info(player_url):
     player_panel_html = player_html.find_all("h2",
                                              class_="styles__DetailBoxTitle-sc-1ss54tr-5 enIhhc")  # html of the most interesting data
     details = str(player_panel_html).replace("<", ">").split(">")
-    raw_nationality = player_html.find_all("span", class_="u-pL8")
-    player_dict['nationality'] = str(raw_nationality).replace("<", ">").split(">")[-3]
+    player_fields_html = player_html.find_all("div", class_="styles__DetailBoxContent-sc-1ss54tr-6 iAORZR")
+    fields_list = str(player_fields_html).replace("<", ">").split(">")
+
     player_dict['name'] = player_url.split("/")[-2].replace('-', ' ').title()
-    age_flag = True
+    if "Nationality" in fields_list:
+        raw_nationality = player_html.find_all("span", class_="u-pL8")
+        player_dict['nationality'] = str(raw_nationality).replace("<", ">").split(">")[-3]
+    for field in fields_list:
+        try:
+            b_day = parse(field, fuzzy=False)
+            player_dict['birth_date'] = b_day
+        except ValueError:
+            continue
     for i in range(len(details)):
         if (r"h2 class=" in details[i] or r"span style" in details[i]) and details[i + 1] != '':  # adding data to the list
-            if age_flag:
-                player_dict['age'] = int(details[i + 1])
-                age_flag = False
-            elif 'cm' in details[i + 1]:
+            if 'cm' in details[i + 1]:
                 player_dict['height'] = int(details[i + 1].split()[0])
             elif '€' in details[i + 1]:
                 player_dict['market_val_million_euro'] = details[i + 1].split()[0]
@@ -42,9 +49,10 @@ def extract_player_info(player_url):
                 player_dict['prefd_foot'] = details[i + 1]
             elif details[i + 1] in ['G', 'D', 'M', 'F']:
                 player_dict['position'] = details[i + 1]
-            else:
+            elif "Shirt number" in fields_list:
                 player_dict['shirt_num'] = int(details[i + 1])
-    dang_keys = ['age', 'height', 'prefd_foot', 'position', 'shirt_num', 'market_val_million_euro']
+
+    dang_keys = ['birth_date', 'height', 'prefd_foot', 'position', 'shirt_num', 'market_val_million_euro', 'nationality']
     for key in dang_keys:
         if key not in player_dict.keys():
             player_dict[key] = None
