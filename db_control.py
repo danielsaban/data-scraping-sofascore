@@ -10,6 +10,7 @@ def connector():
         database=cfg.DB_NAME
     )
 
+
 def create():
     my_db = mysql.connector.connect(
         host=cfg.HOST,
