@@ -1,4 +1,4 @@
-# README -  SofaScore
+# README -  SofaScore Scraper
 
 The program reaches the website [SofaScore](https://www.sofascore.com/) and scrapes data for the football players of the main european leagues.
 
