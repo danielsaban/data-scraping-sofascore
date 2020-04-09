@@ -2,18 +2,40 @@ import db_control
 import config as cfg
 import html_parser as hp
 from tqdm import tqdm
+import argparse
+
+
+def parsing():
+    """
+    using argparse to simplify the cli for the user
+    """
+    leagues = []
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-s", "--SerieA", help="download Italian league players", action="store_true")
+    parser.add_argument("-p", "--PremierLeague", help="download English league players", action="store_true")
+    parser.add_argument("-l", "--LaLiga", help="download Spanish league players", action="store_true")
+    args = parser.parse_args()
+
+    if args.PremierLeague:
+        leagues.append("premier")
+    if args.LaLiga:
+        leagues.append("laliga")
+    if args.SerieA:
+        leagues.append("seriea")
+    return leagues
 
 
 def main():
     """
     this is main calling function to extract players data out of https://www.sofascore.com
     """
+    leagues_to_download = parsing()
     db_control.create()
     watch = tqdm(total=100, position=0)
 
-    for league_url in cfg.TOP3_LEAGUES_URLS:  # iterating league links
-        teams = hp.extract_teams_urls(league_url)  # extracting teams out of leagues tables
-        league_name = league_url.split("/")[-2]
+    for league in leagues_to_download:  # iterating league links
+        teams = hp.extract_teams_urls(cfg.TOP3_LEAGUES_URLS[league])  # extracting teams out of leagues tables
+        league_name = cfg.TOP3_LEAGUES_URLS[league].split("/")[-2]
         print("\ngetting teams from " + league_name)  # printing for user "loading" in addition to tqdm
         db_control.write_league([league_name, len(teams)])
 
