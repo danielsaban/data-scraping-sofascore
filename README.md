@@ -1,45 +1,45 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+# README -  SofaScore
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+The program reaches the website [SofaScore](https://www.sofascore.com/) and scrapes data for the football players of the main european leagues.
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+## Data
 
----
+For the selected football leagues, all the team names are collected.
 
-## Edit a file
+For every team, each player is scraped and a series of information is stored in a database:
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
+```
+1. Name
+2. Nationality
+3. Age
+4. Height
+5. Preferred Foot
+6. Position on the Pitch
+7. Shirt Number
+8. Market Value
+```
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+If the data related to a certain league hasn't been scraped before, it will be simply added to the database.
 
----
+If otherwise the data from the selected league is already present in the database, this data will be overwritten by the current one.
 
-## Create a file
+## Usage
 
-Next, you’ll add a new file to this repository.
+As a first step it's important to write the correct username and password in "config.py".
 
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
+```
+pip install -r requirements.txt
+```
 
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+```
+python main.py -s -p -l
+```
 
----
+CLI Arg | Action
+------------ | ------------- 
+-s | scrapes teams and players from Serie A
+-p | scrapes teams and players from Premier League
+-l | scrapes teams and players from La Liga
 
-## Clone a repository
+The user can choose which league or combination of leagues to scrape and to create/update the database with.
 
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
-
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
-
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
