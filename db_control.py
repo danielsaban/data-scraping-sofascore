@@ -92,3 +92,21 @@ def write_players(players_info, team_n):
                      player['prefd_foot'], player['position'], player['shirt_num'], player['market_val_million_euro']))
     my_db.commit()
     cur.close()
+
+
+def check_and_delete(league_name):
+    my_db = connector()
+    cur = my_db.cursor()
+    cur.execute("SELECT league_id FROM leagues WHERE league_name ='"+league_name+"'")
+    league_id = cur.fetchall()
+    if len(league_id) != 0:
+        cur.execute("SELECT team_id FROM teams WHERE league_id="+str(league_id[0][0]))
+        team_ids = cur.fetchall()
+        if len(team_ids) > 0:
+            for team_id in team_ids:
+                cur.execute("DELETE FROM players WHERE team_id = "+str(team_id[0]))
+                my_db.commit()
+            cur.execute("DELETE FROM teams WHERE league_id = "+str(league_id[0][0]))
+            my_db.commit()
+        cur.execute("DELETE FROM leagues WHERE league_id = "+str(league_id[0][0]))
+        my_db.commit()
