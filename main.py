@@ -16,12 +16,12 @@ def parsing():
     parser.add_argument("-l", "--LaLiga", help="download Spanish league players", action="store_true")
     args = parser.parse_args()
 
+    if args.SerieA:
+        leagues.append("seriea")
     if args.PremierLeague:
         leagues.append("premier")
     if args.LaLiga:
         leagues.append("laliga")
-    if args.SerieA:
-        leagues.append("seriea")
     return leagues
 
 

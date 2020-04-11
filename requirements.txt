@@ -1,0 +1,7 @@
+requests
+selenium
+bs4
+dateutil
+mysql
+tqdm
+argparse
