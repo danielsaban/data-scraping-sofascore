@@ -29,19 +29,20 @@ def main():
     """
     this is main calling function to extract players data out of https://www.sofascore.com
     """
+    # validating that the user changed the MySQL password and username to connect
     if cfg.PASSWD == "" or cfg.USERNAME == "":
         exit("Please read README.md!")
 
-    leagues_to_download = parsing()
+    leagues_to_download = parsing()  # getting commands from the cli
     db_control.create()  # will create database and tables that does not exists.
-    watch = tqdm(total=100, position=0)
 
     for league in leagues_to_download:  # iterating league links
         league_name = cfg.TOP3_LEAGUES_URLS[league].split("/")[-2]
         db_control.check_and_delete(league_name)
         teams = hp.extract_teams_urls(cfg.TOP3_LEAGUES_URLS[league])  # extracting teams out of leagues tables
-        print("\ngetting teams from " + league_name)  # printing for user "loading" in addition to tqdm
+        print("getting teams from " + league_name)  # printing for user "loading" in addition to tqdm
         db_control.write_league([league_name, len(teams)])
+        watch = tqdm(total=len(teams), position=0)
         for team_url in teams:  # iterating all teams urls
             players_list = hp.extract_players_urls(team_url)  # extracting player url which
             team_name = team_url.split('/')[-2]

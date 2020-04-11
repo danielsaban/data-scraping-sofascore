@@ -2,6 +2,7 @@ import requests
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from dateutil.parser import parse
+from selenium.webdriver.chrome.options import Options
 import config as cfg
 
 arrow_manipu = lambda x: x.replace("<", ">").split(">")
@@ -83,10 +84,15 @@ def extract_teams_urls(league_url):
     :return: all teams urlss unique and alphabetically sorted in a list
     """
     team_list = []
-    driver = webdriver.Chrome()  # working with selenium google driver as the data is not in the bs4 html
+
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    driver = webdriver.Chrome(options=chrome_options)  # working with selenium google driver as the data is not in the bs4 html
     driver.get(league_url)  # mimicking human behaviour and opening league url
     team_html = BeautifulSoup(driver.page_source, 'html.parser')  # getting the source with selenium, parsing with bs4
-    all_teams_html = team_html.find_all("a", class_="js-link")  # looking after all teams urls
+    driver.close()
+    # looking after all teams urls
+    all_teams_html = team_html.find_all("div", class_="Content-sc-1o55eay-0 gYsVZh u-pL8 fw-medium")
     html_list = str(all_teams_html).split()  # splitting the string by spaces
     for line in html_list:
         is_line_with_link = "href=\"/team" in line and not line.endswith("img")

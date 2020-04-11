@@ -3,6 +3,10 @@ import config as cfg
 
 
 def connector():
+    """
+    creating a connector to an existing db
+    :return: return the valid connector
+    """
     return mysql.connector.connect(
         host=cfg.HOST,
         user=cfg.USERNAME,
@@ -12,6 +16,9 @@ def connector():
 
 
 def create():
+    """
+    creating an MySQL database
+    """
     my_db = mysql.connector.connect(
         host=cfg.HOST,
         user=cfg.USERNAME,
@@ -60,6 +67,10 @@ def create():
 
 
 def write_league(league_info):
+    """
+    writing the league info to the database
+    :param league_info: a list with the league name and the number of teams in this league
+    """
     my_db = connector()
     cur = my_db.cursor()
     cur.execute("INSERT INTO leagues (league_name, number_of_teams) VALUES (%s, %s)"
@@ -70,6 +81,11 @@ def write_league(league_info):
 
 
 def write_teams(teams_info, lg_name):
+    """
+    writing a team info to the database
+    :param teams_info: the team name, number of players in the team
+    :param lg_name: the league which the teams belong to - foreign key
+    """
     my_db = connector()
     cur = my_db.cursor()
     cur.execute("INSERT INTO teams (team_name, number_of_players, league_id) VALUES "
@@ -81,6 +97,11 @@ def write_teams(teams_info, lg_name):
 
 
 def write_players(players_info, team_n):
+    """
+    writing a list of players to the database
+    :param players_info: a list of dictionaries, each dict stands for a player with several data fields.
+    :param team_n: the name of the team which the players belong to
+    """
     my_db = connector()
     cur = my_db.cursor()
     for player in players_info:
@@ -95,6 +116,10 @@ def write_players(players_info, team_n):
 
 
 def check_and_delete(league_name):
+    """
+    this function checks if the league already exists in the database, if so deletes it.
+    :param league_name: getting the league name from user
+    """
     my_db = connector()
     cur = my_db.cursor()
     cur.execute("SELECT league_id FROM leagues WHERE league_name ='"+league_name+"'")
