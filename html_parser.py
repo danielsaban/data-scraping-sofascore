@@ -77,6 +77,43 @@ def extract_players_urls(team_url):
     return players_list
 
 
+def extract_mgr_url(team_url):
+    mgr_link = ""
+    soup = BeautifulSoup(requests.get(team_url).text, 'html.parser')
+    mgr_html = soup.find('td', class_="ff-medium")
+    for line in str(mgr_html).split():
+        if "href" in line:
+            mgr_link = "https://www.sofascore.com" + line.split("\"")[1]
+    return mgr_link
+
+
+def extract_mgr_info(manager_url):
+    """
+    this function gets a manager url and extract all desired data from the source html
+    :param manager_url: a manger url
+    :return: a dictionary that contains all the dat about a manager.
+    """
+    mgr_dict = {}
+    mgr_soup = BeautifulSoup(requests.get(extract_mgr_url(manager_url)).text, 'html.parser')
+    mgr_dict['name'] = mgr_soup.find('div', class_="Content-sc-1o55eay-0 gYsVZh u-fs25 fw-medium").get_text()
+    mgr_dict['nationality'] = mgr_soup.find('span', style="padding-left:6px").get_text()
+    field_list = arrow_manipu(str(mgr_soup.find_all('div', class_="Content-sc-1o55eay-0 gYsVZh u-txt-2")))
+    for field in field_list:
+        try:
+            b_day = parse(field, fuzzy=False)
+            mgr_dict['birth_date'] = b_day
+        except ValueError:
+            continue
+    values_list = arrow_manipu(str(mgr_soup.find_all('div', class_="Content-sc-1o55eay-0 gYsVZh u-fs21 fw-medium")))
+    mgr_dict['pref_formation'] = values_list[12]
+    mgr_dict['avg_points_per_game'] = values_list[20]
+    mgr_dict['games_won'] = mgr_soup.find('div', class_="Section-sc-1a7xrsb-0 dPyKtM u-txt-green").get_text()
+    mgr_dict['games_drawn'] = mgr_soup.find('div', class_="Section-sc-1a7xrsb-0 dPyKtM u-txt-2").get_text()
+    mgr_dict['games_lost'] = mgr_soup.find('div', class_="Section-sc-1a7xrsb-0 dPyKtM u-txt-red").get_text()
+
+    return mgr_dict
+
+
 def extract_teams_urls(league_url):
     """
     this function extract teams url out of league home page
@@ -87,7 +124,8 @@ def extract_teams_urls(league_url):
 
     chrome_options = Options()
     chrome_options.add_argument("--headless")
-    driver = webdriver.Chrome(options=chrome_options)  # working with selenium google driver as the data is not in the bs4 html
+    driver = webdriver.Chrome(
+        options=chrome_options)  # working with selenium google driver as the data is not in the bs4 html
     driver.get(league_url)  # mimicking human behaviour and opening league url
     team_html = BeautifulSoup(driver.page_source, 'html.parser')  # getting the source with selenium, parsing with bs4
     driver.close()

@@ -42,8 +42,8 @@ def create():
     cur.execute('''CREATE TABLE IF NOT EXISTS managers (
                         manager_id INT PRIMARY KEY AUTO_INCREMENT,
                         team_id INT,
-                        mngr_name VARCHAR(255) NOT NULL,
-                        age INT,
+                        manager_name VARCHAR(255) NOT NULL,
+                        birth_date DATETIME,
                         nationality VARCHAR(255),
                         pref_formation VARCHAR(255),
                         avg_points_per_game REAL,
@@ -115,6 +115,24 @@ def write_players(players_info, team_n):
     cur.close()
 
 
+def write_manager(mgr_info, team_n):
+    """
+    writing a manager to the database
+    :param mgr_info: a dictionary, that represent a manger with several data fields.
+    :param team_n: the name of the team which the manager belong to
+    """
+    my_db = connector()
+    cur = my_db.cursor()
+    cur.execute("INSERT INTO managers (team_id, manager_name, birth_date, nationality, pref_formation,"
+                "avg_points_per_game, games_won, games_drawn, games_lost)"
+                "VALUES ((SELECT team_id FROM teams WHERE team_name='"+team_n+"' LIMIT 1),%s, %s, %s, %s, %s, %s, %s, %s)"
+                "ON DUPLICATE KEY UPDATE manager_id=manager_id",
+                (mgr_info['name'], mgr_info['birth_date'], mgr_info['nationality'], mgr_info['pref_formation'],
+                 mgr_info['avg_points_per_game'], mgr_info['games_won'], mgr_info['games_drawn'], mgr_info['games_lost']))
+    my_db.commit()
+    cur.close()
+
+
 def check_and_delete(league_name):
     """
     this function checks if the league already exists in the database, if so deletes it.
@@ -130,6 +148,7 @@ def check_and_delete(league_name):
         if len(team_ids) > 0:
             for team_id in team_ids:
                 cur.execute("DELETE FROM players WHERE team_id = "+str(team_id[0]))
+                cur.execute("DELETE FROM managers WHERE team_id = "+str(team_id[0]))
                 my_db.commit()
             cur.execute("DELETE FROM teams WHERE league_id = "+str(league_id[0][0]))
             my_db.commit()

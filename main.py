@@ -40,14 +40,16 @@ def main():
         league_name = cfg.TOP3_LEAGUES_URLS[league].split("/")[-2]
         db_control.check_and_delete(league_name)
         teams = hp.extract_teams_urls(cfg.TOP3_LEAGUES_URLS[league])  # extracting teams out of leagues tables
-        print("getting teams from " + league_name)  # printing for user "loading" in addition to tqdm
+        print("\ngetting teams from " + league_name)  # printing for user "loading" in addition to tqdm
         db_control.write_league([league_name, len(teams)])
         watch = tqdm(total=len(teams), position=0)
         for team_url in teams:  # iterating all teams urls
+            manager_info = hp.extract_mgr_info(team_url)
             players_list = hp.extract_players_urls(team_url)  # extracting player url which
             team_name = team_url.split('/')[-2]
             db_control.write_teams([team_name, len(players_list)], league_name)
             db_control.write_players(players_list, team_name)
+            db_control.write_manager(manager_info, team_name)
             watch.update(1)
 
 
