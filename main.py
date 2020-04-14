@@ -1,6 +1,7 @@
 import db_control
 import config as cfg
 import html_parser as hp
+import api_data as api
 from tqdm import tqdm
 import argparse
 
@@ -44,12 +45,14 @@ def main():
         db_control.write_league([league_name, len(teams)])
         watch = tqdm(total=len(teams), position=0)
         for team_url in teams:  # iterating all teams urls
+            team_name = team_url.split('/')[-2]
             manager_info = hp.extract_mgr_info(team_url)
             players_list = hp.extract_players_urls(team_url)  # extracting player url which
-            team_name = team_url.split('/')[-2]
             db_control.write_teams([team_name, len(players_list)], league_name)
             db_control.write_players(players_list, team_name)
             db_control.write_manager(manager_info, team_name)
+            extra_team_info = api.get_info_from_api(team_name)  # retrieving external data from the api
+            db_control.write_team_extras(extra_team_info, team_name)  # writing this data into the database
             watch.update(1)
 
 

@@ -3,6 +3,8 @@ PASSWD = "Eilat2012"
 USERNAME = "Sagi"
 HOST = "localhost"
 
+API_URL = r"https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t="
+
 POSSIBLE_FOOT = ['Right', 'Left', 'Both']
 POSSIBLE_POSITION = ['G', 'D', 'M', 'F']
 PLAYER_FIELDS = ['birth_date', 'height', 'prefd_foot', 'position',
