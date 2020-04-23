@@ -117,7 +117,7 @@ def extract_teams_urls(league_url):
     team_list = []
 
     chrome_options = Options()
-
+    chrome_options.binary_location = r'/usr/share/man/man1/google-chrome.1.gz'
     chrome_options.add_argument("--headless")
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
