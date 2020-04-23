@@ -61,7 +61,6 @@ def create():
                         prefd_foot VARCHAR(255),
                         position VARCHAR(255),
                         shirt_num INT,
-                        market_val_million_euro REAL,
                         FOREIGN KEY (team_id) REFERENCES teams(team_id))''')
     cur.execute('''CREATE TABLE IF NOT EXISTS teams_extras (
                         id_Team INT PRIMARY KEY,
@@ -124,11 +123,11 @@ def write_players(players_info, team_n):
     cur = my_db.cursor()
     for player in players_info:
         cur.execute("INSERT INTO players (team_id, player_name, nationality, birth_date, height_cm, prefd_foot,"
-                    "position, shirt_num, market_val_million_euro)"
-                    "VALUES ((SELECT team_id FROM teams WHERE team_name='"+team_n+"' LIMIT 1),%s, %s, %s, %s, %s, %s, %s, %s)"
+                    "position, shirt_num)"
+                    "VALUES ((SELECT team_id FROM teams WHERE team_name='"+team_n+"' LIMIT 1),%s, %s, %s, %s, %s, %s, %s)"
                     "ON DUPLICATE KEY UPDATE player_id=player_id",
                     (player['name'], player['nationality'], player['birth_date'], player['height'],
-                     player['prefd_foot'], player['position'], player['shirt_num'], player['market_val_million_euro']))
+                     player['prefd_foot'], player['position'], player['shirt_num']))
     my_db.commit()
     cur.close()
 

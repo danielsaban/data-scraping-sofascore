@@ -13,7 +13,7 @@ def extract_player_info(player_url):
     Starting from the url of a player's page on https://www.sofascore.com, the function extracts
     the most interesting infos about him, if available, and returns them in a dict.
     :param player_url: url of the player on https://www.sofascore.com site.
-    :return: dict with this keys: [Name, Nationality, birth-date, Height, Preferred Foot, Position, Shirt Number, Market Value]
+    :return: dict with this keys: [Name, Nationality, birth-date, Height, Preferred Foot, Position, Shirt Number, Average site rating]
     """
     player_dict = {}
     # beautiful_soup of the player
@@ -23,7 +23,6 @@ def extract_player_info(player_url):
     details = arrow_manipu(str(player_panel_html))
     player_fields_html = player_html.find_all("div", class_="styles__DetailBoxContent-sc-1ss54tr-6 iAORZR")
     fields_list = arrow_manipu(str(player_fields_html))
-
     player_dict['name'] = player_url.split("/")[-2].replace('-', ' ').title()
     if "Nationality" in fields_list:
         raw_nationality = player_html.find_all("span", class_="u-pL8")
@@ -34,17 +33,12 @@ def extract_player_info(player_url):
             player_dict['birth_date'] = b_day
         except ValueError:
             continue
+
     for i in range(len(details)):
         is_a_detail = (r"h2 class=" in details[i] or r"span style" in details[i]) and details[i + 1] != ''
         if is_a_detail:
             if 'cm' in details[i + 1]:
                 player_dict['height'] = int(details[i + 1].split()[0])
-            elif '€' in details[i + 1]:
-                player_dict['market_val_million_euro'] = details[i + 1].split()[0]
-                if 'M' in player_dict['market_val_million_euro']:
-                    player_dict['market_val_million_euro'] = float(player_dict['market_val_million_euro'][:-1])
-                else:
-                    player_dict['market_val_million_euro'] = float(player_dict['market_val_million_euro'][:-1]) / 1000
             elif details[i + 1] in cfg.POSSIBLE_FOOT:
                 player_dict['prefd_foot'] = details[i + 1]
             elif details[i + 1] in cfg.POSSIBLE_POSITION:
@@ -124,8 +118,8 @@ def extract_teams_urls(league_url):
 
     chrome_options = Options()
     chrome_options.add_argument("--headless")
-    driver = webdriver.Chrome(
-        options=chrome_options)  # working with selenium google driver as the data is not in the bs4 html
+    # working with selenium google driver as the data is not in the bs4 html
+    driver = webdriver.Chrome(options=chrome_options, executable_path='/chromedriver.exe')
     driver.get(league_url)  # mimicking human behaviour and opening league url
     team_html = BeautifulSoup(driver.page_source, 'html.parser')  # getting the source with selenium, parsing with bs4
     driver.close()
