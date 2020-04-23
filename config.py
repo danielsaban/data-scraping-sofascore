@@ -1,5 +1,5 @@
 DB_NAME = "sofa_score"
-PASSWD = "Eilat2012"
+PASSWD = "Sofa_Score_2020"
 USERNAME = "Sagi"
 HOST = "localhost"
 
