@@ -117,7 +117,11 @@ def extract_teams_urls(league_url):
     team_list = []
 
     chrome_options = Options()
+
     chrome_options.add_argument("--headless")
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+
     # working with selenium google driver as the data is not in the bs4 html
     driver = webdriver.Chrome(options=chrome_options, executable_path=r'./chromedriver')
     driver.get(league_url)  # mimicking human behaviour and opening league url
