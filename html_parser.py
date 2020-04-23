@@ -2,7 +2,7 @@ import requests
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from dateutil.parser import parse
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.options import Options
 import config as cfg
 
 arrow_manipu = lambda x: x.replace("<", ">").split(">")
@@ -126,7 +126,7 @@ def extract_teams_urls(league_url):
 
     options = Options()
     options.add_argument("--headless")
-    driver = webdriver.Firefox(firefox_options=options, executable_path=r'./geckodriver')
+    driver = webdriver.Firefox(executable_path=r'./geckodriver', firefox_options=options)
 
     driver.get(league_url)  # mimicking human behaviour and opening league url
     team_html = BeautifulSoup(driver.page_source, 'html.parser')  # getting the source with selenium, parsing with bs4
