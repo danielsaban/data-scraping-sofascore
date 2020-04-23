@@ -125,8 +125,9 @@ def extract_teams_urls(league_url):
     # driver = webdriver.Chrome(options=chrome_options, executable_path=r'./chromedriver')
 
     options = Options()
-    options.headless = True
-    driver = webdriver.Firefox(options=options, executable_path=r'./geckodriver')
+    options.add_argument("--headless")
+    driver = webdriver.Firefox(firefox_options=options, executable_path=r'./geckodriver')
+
     driver.get(league_url)  # mimicking human behaviour and opening league url
     team_html = BeautifulSoup(driver.page_source, 'html.parser')  # getting the source with selenium, parsing with bs4
     driver.close()
