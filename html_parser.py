@@ -119,7 +119,7 @@ def extract_teams_urls(league_url):
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     # working with selenium google driver as the data is not in the bs4 html
-    driver = webdriver.Chrome(options=chrome_options, executable_path=r'./chromedriver.exe')
+    driver = webdriver.Chrome(options=chrome_options, executable_path=r'./chromedriver')
     driver.get(league_url)  # mimicking human behaviour and opening league url
     team_html = BeautifulSoup(driver.page_source, 'html.parser')  # getting the source with selenium, parsing with bs4
     driver.close()
