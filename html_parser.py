@@ -2,10 +2,23 @@ import requests
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from dateutil.parser import parse
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.chrome.options import Options
 import config as cfg
 
 arrow_manipu = lambda x: x.replace("<", ">").split(">")
+
+
+def get_driver():
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    # chrome_options.add_argument('--no-sandbox')
+
+    # working with selenium google driver as the data is not in the bs4 html
+    return webdriver.Chrome(executable_path=r'./chromedriver.exe', options=chrome_options)
+
+    # options = Options()
+    # options.add_argument("--headless")
+    # driver = webdriver.Firefox(executable_path=r'./geckodriver.exe', firefox_options=options)
 
 
 def extract_player_info(player_url):
@@ -60,9 +73,11 @@ def extract_players_urls(team_url):
     """
     players_list = []
     # using bs4 & requests to retrieve html as text
-    team_html = BeautifulSoup(requests.get(team_url).text, 'html.parser')
+    driver = get_driver()
+    driver.get(team_url)
+    team_html = BeautifulSoup(driver.page_source, 'html.parser')
     # looking for the player info inside the page
-    all_players_html = team_html.find_all("a", class_="squad__player squad-player u-tC js-show-player-modal ff-medium")
+    all_players_html = team_html.find_all("a", class_="styles__CardWrapper-sc-1dlv1k5-15 czXoLq")
     # manipulating the text to extract player links
     html_list = str(all_players_html).split()
     for line in html_list:
@@ -73,8 +88,10 @@ def extract_players_urls(team_url):
 
 def extract_mgr_url(team_url):
     mgr_link = ""
-    soup = BeautifulSoup(requests.get(team_url).text, 'html.parser')
-    mgr_html = soup.find('td', class_="ff-medium")
+    driver = get_driver()
+    driver.get(team_url)
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    mgr_html = soup.find('div', class_="Content-sc-1o55eay-0 styles__ManagerContent-qlwzq-9 dxQrED")
     for line in str(mgr_html).split():
         if "href" in line:
             mgr_link = "https://www.sofascore.com" + line.split("\"")[1]
@@ -115,19 +132,7 @@ def extract_teams_urls(league_url):
     :return: all teams urlss unique and alphabetically sorted in a list
     """
     team_list = []
-
-    # chrome_options = Options()
-    # chrome_options.binary_location = r'/usr/share/man/man1/google-chrome.1.gz'
-    # chrome_options.add_argument("--headless")
-    # chrome_options.add_argument('--no-sandbox')
-    # chrome_options.add_argument('--disable-dev-shm-usage')
-    # working with selenium google driver as the data is not in the bs4 html
-    # driver = webdriver.Chrome(options=chrome_options, executable_path=r'./chromedriver')
-
-    options = Options()
-    options.add_argument("--headless")
-    driver = webdriver.Firefox(executable_path=r'./geckodriver', firefox_options=options)
-
+    driver = get_driver()
     driver.get(league_url)  # mimicking human behaviour and opening league url
     team_html = BeautifulSoup(driver.page_source, 'html.parser')  # getting the source with selenium, parsing with bs4
     driver.close()
