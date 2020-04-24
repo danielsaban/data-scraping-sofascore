@@ -16,10 +16,6 @@ def get_driver():
     # working with selenium google driver as the data is not in the bs4 html
     return webdriver.Chrome(executable_path=r'./chromedriver', options=chrome_options)
 
-    # options = Options()
-    # options.add_argument("--headless")
-    # driver = webdriver.Firefox(executable_path=r'./geckodriver.exe', firefox_options=options)
-
 
 def extract_player_info(player_url):
     """

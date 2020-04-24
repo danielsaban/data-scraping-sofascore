@@ -11,7 +11,9 @@ def connector():
         host=cfg.HOST,
         user=cfg.USERNAME,
         password=cfg.PASSWD,
-        database=cfg.DB_NAME
+        database=cfg.DB_NAME,
+        charset='utf8',
+        use_unicode=True
     )
 
 
