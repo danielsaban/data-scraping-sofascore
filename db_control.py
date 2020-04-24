@@ -163,7 +163,7 @@ def write_team_extras(team_info, team_n):
     my_db = connector()
     cur = my_db.cursor()
     team_des = (unicodedata.normalize('NFD', team_info['strDescriptionEN']).encode('ascii', 'ignore'))
-    if team_info['strStadiumDescription'] is None:
+    if team_info['strStadiumDescription'] is not None:
         stad_des = (unicodedata.normalize('NFD', team_info['strStadiumDescription']).encode('ascii', 'ignore'))
     else:
         stad_des = None
