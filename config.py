@@ -1,5 +1,5 @@
-DB_NAME = "test"
-PASSWD = "Eilat2012"
+DB_NAME = "sofa_score"
+PASSWD = "Sofa_Score_2020"
 USERNAME = "Sagi"
 HOST = "localhost"
 

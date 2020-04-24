@@ -14,7 +14,7 @@ def get_driver():
     # chrome_options.add_argument('--no-sandbox')
 
     # working with selenium google driver as the data is not in the bs4 html
-    return webdriver.Chrome(executable_path=r'./chromedriver.exe', options=chrome_options)
+    return webdriver.Chrome(executable_path=r'./chromedriver', options=chrome_options)
 
     # options = Options()
     # options.add_argument("--headless")
