@@ -163,7 +163,10 @@ def write_team_extras(team_info, team_n):
     my_db = connector()
     cur = my_db.cursor()
     team_des = (unicodedata.normalize('NFD', team_info['strDescriptionEN']).encode('ascii', 'ignore'))
-    stad_des = (unicodedata.normalize('NFD', team_info['strStadiumDescription']).encode('ascii', 'ignore'))
+    if team_info['strStadiumDescription'] is None:
+        stad_des = (unicodedata.normalize('NFD', team_info['strStadiumDescription']).encode('ascii', 'ignore'))
+    else:
+        stad_des = None
     cur.execute("INSERT INTO teams_extras (team_id, id_Team, team_name, team_name_short, alternate_team_name,"
                 "formed_year, stadium_name, stadium_pic_url, stadium_description, stadium_location, stadium_capacity,"
                 "team_website, team_facebook, team_twitter, team_instagram, team_description)"
