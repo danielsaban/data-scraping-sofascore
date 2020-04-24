@@ -12,7 +12,7 @@ def connector():
         user=cfg.USERNAME,
         password=cfg.PASSWD,
         database=cfg.DB_NAME,
-        charset='utf8',
+        charset='utf8mb4',
         use_unicode=True
     )
 
