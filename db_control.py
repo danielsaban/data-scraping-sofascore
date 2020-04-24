@@ -142,11 +142,15 @@ def write_manager(mgr_info, team_n):
     """
     my_db = connector()
     cur = my_db.cursor()
+    print(mgr_info['name'])
+    print('\n')
+    print(mgr_info['name'].encode('utf-8'))
+    print('\n')
     cur.execute("INSERT INTO managers (team_id, manager_name, birth_date, nationality, pref_formation,"
                 "avg_points_per_game, games_won, games_drawn, games_lost)"
                 "VALUES ((SELECT team_id FROM teams WHERE team_name='"+team_n+"' LIMIT 1),%s, %s, %s, %s, %s, %s, %s, %s)"
                 "ON DUPLICATE KEY UPDATE manager_id=manager_id",
-                (mgr_info['name'], mgr_info['birth_date'], mgr_info['nationality'], mgr_info['pref_formation'],
+                (mgr_info['name'].encode('utf-8'), mgr_info['birth_date'], mgr_info['nationality'], mgr_info['pref_formation'],
                  mgr_info['avg_points_per_game'], mgr_info['games_won'], mgr_info['games_drawn'], mgr_info['games_lost']))
     my_db.commit()
     cur.close()
