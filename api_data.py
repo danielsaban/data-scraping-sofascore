@@ -30,6 +30,16 @@ def get_info_from_api(team_name):
         team_name = "union+berlin"
     if "fsv+mainz" in team_name:
         team_name = "mainz"
+    if "hoffenheim" in team_name:
+        team_name = "hoffenheim"
+    if "mgladbach" in team_name:
+        team_name = "borussia+monchengladbach"
+    if "schalke" in team_name:
+        team_name = "schalke"
+    if "leverkusen" in team_name:
+        team_name = "leverkusen"
+    if "paderborn" in team_name:
+        team_name = "paderborn"
     print(team_name)
     response = requests.get(cfg.API_URL + team_name)
     team_data = json.loads(response.text)
