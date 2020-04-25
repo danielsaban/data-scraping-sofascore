@@ -11,8 +11,6 @@ arrow_manipu = lambda x: x.replace("<", ">").split(">")
 def get_driver():
     chrome_options = Options()
     chrome_options.add_argument("--headless")
-    # chrome_options.add_argument('--no-sandbox')
-
     # working with selenium google driver as the data is not in the bs4 html
     return webdriver.Chrome(executable_path=r'./chromedriver', options=chrome_options)
 
