@@ -26,6 +26,8 @@ def get_info_from_api(team_name):
         team_name = "bayern"
     if "koln" in team_name:
         team_name = "fc+koln"
+    if "union-berlin" in team_name:
+        team_name = "union+berlin"
     print(team_name)
     response = requests.get(cfg.API_URL + team_name)
     team_data = json.loads(response.text)
