@@ -1,7 +1,7 @@
 requests
 selenium
 bs4
-dateutil
-mysql
+python-dateutil
+mysql-connector-python
 tqdm
 argparse
