@@ -1,6 +1,6 @@
 # README -  SofaScore Scraper
 
-This Data Engineering project performs some detailed Data Mining operations, reaching the website [SofaScore](https://www.sofascore.com/) and scraping data about football players and managers of the main european leagues. 
+This Data Engineering project performs some detailed Data Mining operations, reaching the website [SofaScore](https://www.sofascore.com/) and scraping data about football players and managers from the main european leagues. 
 
 Then, it makes sure all the data is safely stored in a Relational Database, ready to be exploited by the user.
 
