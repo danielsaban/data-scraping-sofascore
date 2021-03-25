@@ -1,6 +1,8 @@
 # README -  SofaScore Scraper
 
-The program reaches the website [SofaScore](https://www.sofascore.com/) and scrapes data for the football players of the main european leagues.
+This Data Engineering project performs some detailed Data Mining operations, reaching the website [SofaScore](https://www.sofascore.com/) and scraping data about football players and managers of the main european leagues. 
+
+Then, it makes sure all the data is safely stored in a Relational Database, ready to be exploited by the user.
 
 ## Data
 
@@ -11,12 +13,43 @@ For every team, each player is scraped and a series of information is stored in 
 ```
 1. Name
 2. Nationality
-3. Age
+3. Date of Birth
 4. Height
 5. Preferred Foot
 6. Position on the Pitch
 7. Shirt Number
-8. Market Value
+```
+
+Information about managers is parsed as well:
+
+```
+1. Name
+2. Date of Birth
+3. Nationality
+4. Preferred Formation
+5. Average Points per Game
+6. Games Won
+7. Games Drawn
+8. Games Lost
+```
+
+Moreover, extra data about the various teams is obtained and stored in the DB:
+
+```
+1. Name
+2. Short Name
+3. Alternative Name
+4. Foundation Year
+5. Stadium Name
+6. Stadium Picture URL
+7. Stadium Description
+8. Stadium Location
+9. Stadium Capacity
+10. Team Website
+11. Team Facebook
+12. Team Twitter
+13. Team Instagram
+14. Team Description
 ```
 
 If the data related to a certain league hasn't been scraped before, it will be simply added to the database.
@@ -44,3 +77,6 @@ CLI Arg | Action
 
 The user can choose which league or combination of leagues to scrape and to create/update the database with.
 
+Created by:
+- `Daniel Saban`
+- `Sagi Elfassi`
