@@ -1,6 +1,6 @@
 DB_NAME = "sofa_score"
 PASSWD = "Sofa_Score_2020"
-USERNAME = "Sagi"
+USERNAME = "Daniel"
 HOST = "localhost"
 
 API_URL = r"https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t="
