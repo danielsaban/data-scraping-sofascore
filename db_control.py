@@ -20,7 +20,7 @@ def connector():
 
 def create():
     """
-    creating an MySQL database
+    creating a MySQL database
     """
     my_db = mysql.connector.connect(
         host=cfg.HOST,
@@ -86,7 +86,7 @@ def create():
     cur.close()
 
 
-def write_league(league_info):
+def write_league(league_info: list):
     """
     writing the league info to the database
     :param league_info: a list with the league name and the number of teams in this league
@@ -100,7 +100,7 @@ def write_league(league_info):
     cur.close()
 
 
-def write_teams(teams_info, lg_name):
+def write_teams(teams_info: list, lg_name):
     """
     writing a team info to the database
     :param teams_info: the team name, number of players in the team
@@ -116,7 +116,7 @@ def write_teams(teams_info, lg_name):
     cur.close()
 
 
-def write_players(players_info, team_n):
+def write_players(players_info: list, team_n):
     """
     writing a list of players to the database
     :param players_info: a list of dictionaries, each dict stands for a player with several data fields.

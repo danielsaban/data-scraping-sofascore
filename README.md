@@ -32,7 +32,7 @@ pip install -r requirements.txt
 ```
 
 ```
-python main.py -s -p -l
+python main.py -s -p -l -b
 ```
 
 CLI Arg | Action
@@ -40,6 +40,7 @@ CLI Arg | Action
 -s | scrapes teams and players from Serie A
 -p | scrapes teams and players from Premier League
 -l | scrapes teams and players from La Liga
+-b | scrapes teams and players from Bundesliga
 
 The user can choose which league or combination of leagues to scrape and to create/update the database with.
 
