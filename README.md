@@ -4,11 +4,11 @@ This Data Engineering project performs some detailed Data Mining operations, rea
 
 Then, it makes sure all the data is safely stored in a Relational Database, ready to be exploited by the user.
 
-## Data
+## The Data
 
 For the selected football leagues, all the team names are collected.
 
-For every team, each player is scraped and a series of information is stored in a database:
+For every team, each player is scraped, and a series of information is stored in a database:
 
 ```
 1. Name
@@ -33,7 +33,7 @@ Information about managers is parsed as well:
 8. Games Lost
 ```
 
-Moreover, extra data about the various teams is obtained and stored in the DB:
+Moreover, extra data about the various teams is obtained from an external [API](https://thesportsdb.com/api.php) and stored in the DB:
 
 ```
 1. Name
