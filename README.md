@@ -79,6 +79,6 @@ CLI Arg | Action
 
 The user can choose which league or combination of leagues to scrape and to create/update the database with.
 
-Created by:
+## Created by:
 - `Daniel Saban`
 - `Sagi Elfassi`
