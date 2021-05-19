@@ -61,6 +61,7 @@ If otherwise the data from the selected league is already present in the databas
 ## Usage
 
 As a first step it's important to write the correct username and password in "config.py".
+Then, just run the following commands:
 
 ```
 pip install -r requirements.txt
